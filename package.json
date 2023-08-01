@@ -1,0 +1,15 @@
+{
+  "name": "a.r.e.s",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "author": "Adrian",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "14.8"
+  }
+}
