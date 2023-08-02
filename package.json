@@ -2,14 +2,17 @@
   "name": "a.r.e.s",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "module",
+  "main": "src/bot.js",
   "scripts": {
-    "dev": "node index.js"
+    "test": "node ."
   },
   "author": "Adrian",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "14.8"
+    "@discordjs/rest": "^2.0.0",
+    "chalk": "^4.1.2",
+    "discord-api-types": "^0.37.51",
+    "discord.js": "^14.10.2",
+    "dotenv": "^16.3.1"
   }
 }

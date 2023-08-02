@@ -1,8 +1,13 @@
 
-const TOKEN = 'MTEzNTcxMDI3ODExODU1NTgyOQ.GojwXM.mE3Iw0acv_ExEsX0QylKADSrk0uqAvk9aTuDYU';
+require('dotenv').config();
+
+import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 
 
-import { Client, GatewayIntentBits } from 'discord.js';
+const token = process.env;
+
+
+
 const client = new Client({ 
     intents: [
         GatewayIntentBits.Guilds,
@@ -10,8 +15,30 @@ const client = new Client({
         GatewayIntentBits.MessageContent
     ] });
 
+  const exampleEmbed = new EmbedBuilder()
+	.setColor(0x0099FF)
+	.setTitle('Some title')
+	.setURL('https://discord.js.org/')
+	.setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
+	.setDescription('Some description here')
+	.setThumbnail('https://i.imgur.com/AfFp7pu.png')
+	.addFields(
+		{ name: 'Regular field title', value: 'Some value here' },
+		{ name: '\u200B', value: '\u200B' },
+		{ name: 'Inline field title', value: 'Some value here', inline: true },
+		{ name: 'Inline field title', value: 'Some value here', inline: true },
+	)
+	.addFields({ name: 'Inline field title', value: 'Some value here', inline: true })
+	.setImage('https://i.imgur.com/AfFp7pu.png')
+	.setTimestamp()
+	.setFooter({ text: 'Some footer text here', iconURL: 'https://i.imgur.com/AfFp7pu.png' });
+
+  const channel = client.channels.cache.find(channel => channel.name === '🗨┃general')
+  
+
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
+  channel.send(message)
 });
 
 client.on('interactionCreate', async interaction => {
@@ -23,4 +50,4 @@ client.on('interactionCreate', async interaction => {
   });
 
   
-client.login(TOKEN);
+client.login(token);
