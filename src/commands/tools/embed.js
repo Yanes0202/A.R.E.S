@@ -25,13 +25,8 @@ module.exports = {
             .setURL(`https://www.youtube.com/watch?v=dQw4w9WgXcQ`)
             .addFields([
                 {
-                    name: `Field1`,
-                    value: `Field1 value`,
-                    inline: true
-                },
-                {
                     name: `Field2`,
-                    value: `Field2 value`,
+                    value: `${role}`,
                     inline: true
                 }
             ]);
