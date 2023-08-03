@@ -1,3 +1,5 @@
+const { checkClaimedCrates } = require("../excel/readSheet.js");
+
 var X = [
   "A",
   "B",
@@ -78,11 +80,12 @@ var Y = [
 
 var table = [];
 
-const kratkiDoPrzejecia = (teren) => {
+const cratesToClaim = async (teren) => {
   var result = [];
+  const unavailbleCrates = await checkClaimedCrates();
 
   for (let i = 0; i < teren.length; i++) {
-    var odpowiedz = [];
+    var availableCrates = [];
 
     var gridBazy = teren[i];
 
@@ -94,21 +97,25 @@ const kratkiDoPrzejecia = (teren) => {
 
     if (teren.length >= 3) {
       if (X[indexX - 1] && Y[indexY - 1])
-        odpowiedz.push(X[indexX - 1] + Y[indexY - 1]);
+        availableCrates.push(X[indexX - 1] + Y[indexY - 1]);
       if (X[indexX - 1] && Y[indexY + 1])
-        odpowiedz.push(X[indexX - 1] + Y[indexY + 1]);
+        availableCrates.push(X[indexX - 1] + Y[indexY + 1]);
       if (X[indexX + 1] && Y[indexY - 1])
-        odpowiedz.push(X[indexX + 1] + Y[indexY - 1]);
+        availableCrates.push(X[indexX + 1] + Y[indexY - 1]);
       if (X[indexX + 1] && Y[indexY + 1])
-        odpowiedz.push(X[indexX + 1] + Y[indexY + 1]);
+        availableCrates.push(X[indexX + 1] + Y[indexY + 1]);
     }
 
-    if (X[indexX - 1] && Y[indexY]) odpowiedz.push(X[indexX - 1] + Y[indexY]);
-    if (X[indexX] && Y[indexY - 1]) odpowiedz.push(X[indexX] + Y[indexY - 1]);
-    if (X[indexX] && Y[indexY + 1]) odpowiedz.push(X[indexX] + Y[indexY + 1]);
-    if (X[indexX + 1] && Y[indexY]) odpowiedz.push(X[indexX + 1] + Y[indexY]);
+    if (X[indexX - 1] && Y[indexY])
+      availableCrates.push(X[indexX - 1] + Y[indexY]);
+    if (X[indexX] && Y[indexY - 1])
+      availableCrates.push(X[indexX] + Y[indexY - 1]);
+    if (X[indexX] && Y[indexY + 1])
+      availableCrates.push(X[indexX] + Y[indexY + 1]);
+    if (X[indexX + 1] && Y[indexY])
+      availableCrates.push(X[indexX + 1] + Y[indexY]);
 
-    result.push(odpowiedz);
+    result.push(availableCrates);
   }
 
   if (teren.length >= 3) {
@@ -123,16 +130,18 @@ const kratkiDoPrzejecia = (teren) => {
       .filter(([item, count]) => count > 1)
       .map(([item]) => item);
 
-    var result = duplicates.filter((item) => !teren.includes(item));
+    var merged = duplicates.filter((item) => !teren.includes(item));
+    var filterOwned = merged.filter((item) => !teren.includes(item));
+    var result = filterOwned.filter((item) => !unavailbleCrates.includes(item));
   } else {
-    var polaczona = [...new Set(result.flat())];
-
-    result = polaczona.filter((item) => !teren.includes(item));
+    var merged = [...new Set(result.flat())];
+    var filterOwned = merged.filter((item) => !teren.includes(item));
+    result = filterOwned.filter((item) => !unavailbleCrates.includes(item));
   }
 
   return result;
 };
 
 module.exports = {
-  kratkiDoPrzejecia,
+  cratesToClaim,
 };

@@ -1,22 +1,11 @@
-require("dotenv").config();
-const { spreadsheetId } = process.env;
-const { googleAuth } = require("./excelConnection.js");
-const { google } = require("googleapis");
+const { sheetInstance, spreadsheetId } = require("./excelConnection.js");
 
 const checkFractionColumn = async (fraction) => {
   try {
-    // google sheet instance
-    const sheetInstance = await google.sheets({
-      version: "v4",
-      auth: googleAuth,
-    });
-    // read data in the range in a sheet
     const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
-      auth: googleAuth,
       spreadsheetId: spreadsheetId,
       range: "Frakcje!A1:R1",
     });
-
     const sheetresult = infoObjectFromSheet.data.values;
     const values = sheetresult.flat();
 
@@ -36,55 +25,111 @@ const checkFractionColumn = async (fraction) => {
       }
     }
 
-    return checkFractionCrates(columnLetter);
-  } catch (err) {
-    console.log("readSheet func() error", err);
+    return columnLetter;
+  } catch (error) {
+    console.error(error);
   }
 };
 
 const checkFractionCrates = async (column) => {
   try {
-    // google sheet instance
-    const sheetInstance = await google.sheets({
-      version: "v4",
-      auth: googleAuth,
-    });
-    // read data in the range in a sheet
     const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
-      auth: googleAuth,
       spreadsheetId: spreadsheetId,
-      range: `Frakcje!${column}4:${column}20`,
+      range: `Frakcje!${column}6:${column}50`,
     });
 
     const sheetresult = infoObjectFromSheet.data.values;
-    return sheetresult.flat();
-  } catch (err) {
-    console.log("readSheet func() error", err);
+    return sheetresult;
+  } catch (error) {
+    console.error(error);
   }
 };
 
 const readAllFractions = async () => {
   try {
-    const sheetInstance = await google.sheets({
-      version: "v4",
-      auth: googleAuth,
-    });
-
     const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
-      auth: googleAuth,
       spreadsheetId: spreadsheetId,
       range: "Frakcje!B1:R1",
     });
 
     const valuesFromSheet = infoObjectFromSheet.data.values;
     return valuesFromSheet;
-  } catch (err) {
-    console.log("readSheet func() error", err);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getColumnToInsert = async () => {
+  try {
+    const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: "Frakcje!A1:R1",
+    });
+    var column;
+    const valuesFromSheet = infoObjectFromSheet.data.values;
+    for (var i = 0; i < valuesFromSheet[0].length; i++) {
+      if (!valuesFromSheet[0][i]) {
+        column = i + 1;
+        break;
+      } else {
+        column = i + 2;
+      }
+    }
+    const columnLetter = String.fromCharCode(64 + column);
+    return columnLetter;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const checkClaimedCrates = async () => {
+  try {
+    const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: "Frakcje!B6:R50",
+    });
+
+    const sheetresult = infoObjectFromSheet.data.values;
+    return sheetresult.flat();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getRowToInsert = async (column) => {
+  try {
+    const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: `Frakcje!${column}6:${column}50`,
+    });
+
+    const sheetresult = infoObjectFromSheet.data.values;
+    var row;
+    if (sheetresult && sheetresult.length > 0) {
+      for (var i = 0; i < sheetresult.length; i++) {
+        if (!sheetresult[i][0]) {
+          row = i + 6;
+          break;
+        } else {
+          row = i + 7;
+        }
+      }
+      return row;
+    } else {
+      console.error("Frakcja ma pusty łeb");
+    }
+
+    return sheetresult.flat();
+  } catch (error) {
+    console.error(error);
   }
 };
 
 module.exports = {
   checkFractionColumn,
   readAllFractions,
+  checkClaimedCrates,
+  getRowToInsert,
   checkFractionCrates,
+  getColumnToInsert
 };
