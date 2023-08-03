@@ -16,7 +16,7 @@ module.exports = {
 
     var playerFraction = await checkUserFraction(userRoles);
 
-    if (playerFraction) {
+    if (playerFraction||userRoles.has("1136436329840902165")) {
       const embed = new EmbedBuilder()
         .setTitle("Jesteś już we frakcji!!!")
         .setColor(0xcf2929);
@@ -60,7 +60,7 @@ module.exports = {
 
     const fractionCrate = new TextInputBuilder()
       .setCustomId("fractionCrate")
-      .setLabel("Na jakiej kratce ma się znajdować frakcja?")
+      .setLabel("Na jakim sektorze ma się znajdować frakcja?")
       .setRequired(true)
       .setStyle(TextInputStyle.Short);
 

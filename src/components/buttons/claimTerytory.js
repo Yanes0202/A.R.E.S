@@ -8,6 +8,7 @@ const {
   StringSelectMenuBuilder,
   ActionRowBuilder,
   StringSelectMenuOptionBuilder,
+  EmbedBuilder
 } = require("discord.js");
 
 module.exports = {

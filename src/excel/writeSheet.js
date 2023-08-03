@@ -34,8 +34,6 @@ const insertClaimTimeStamp = async (column) => {
         values: [[`${todayDate}`]],
       },
     });
-
-    console.log(`${response.data} cell has been updated.`);
   } catch (error) {
     console.error(error);
   }
