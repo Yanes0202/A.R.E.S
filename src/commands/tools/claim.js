@@ -12,6 +12,7 @@ module.exports = {
     .setDescription("Wybieranie terenu do przejęcia!"),
   async execute(interaction, client) {
     const { roles } = interaction.member;
+    interaction.member
     if (roles.cache.has('1136366578590560368')) {
         const menu = new StringSelectMenuBuilder()
         .setCustomId(`claim`)
@@ -32,6 +33,7 @@ module.exports = {
       await interaction.reply({
         components: [new ActionRowBuilder().addComponents(menu)]
       });
+      interaction.member.roles.remove('1136366578590560368');
     } else {
         const embed = new EmbedBuilder()
             .setTitle("Nie masz uprawnień by przejmować kratki!!!")

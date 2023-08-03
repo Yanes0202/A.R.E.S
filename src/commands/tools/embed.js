@@ -26,7 +26,7 @@ module.exports = {
             .addFields([
                 {
                     name: `Field2`,
-                    value: `${role}`,
+                    value: `Field2`,
                     inline: true
                 }
             ]);
