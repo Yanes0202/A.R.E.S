@@ -78,8 +78,6 @@ var Y = [
   "20",
 ];
 
-var table = [];
-
 const cratesToClaim = async (teren) => {
   var result = [];
   const unavailbleCrates = await checkClaimedCrates();

@@ -2,13 +2,13 @@ const {
   checkFractionColumn,
   checkFractionCrates,
 } = require("../../excel/readSheet.js");
-const { cratesToClaim } = require("../../crates/crates.js");
+const { cratesToClaim } = require("../../scripts/claimSystem.js");
 const { checkUserFraction } = require("../../scripts/checkUserFraction.js");
+const { messageEmbed } = require("../../scripts/sendEmbed.js");
 const {
   StringSelectMenuBuilder,
   ActionRowBuilder,
   StringSelectMenuOptionBuilder,
-  EmbedBuilder
 } = require("discord.js");
 
 module.exports = {
@@ -17,14 +17,13 @@ module.exports = {
   },
   async execute(interaction, client) {
     const userRoles = interaction.member.roles.cache;
-
     var playerFraction = await checkUserFraction(userRoles);
+    var fractionColumn = await checkFractionColumn(playerFraction);
+    const fractionCrates = await checkFractionCrates(fractionColumn);
+    const fractionCratesFlat = fractionCrates.flat();
+    const availableCrates = await cratesToClaim(fractionCratesFlat);
 
     if (userRoles.has("1136436329840902165")) {
-      var fractionColumn = await checkFractionColumn(playerFraction);
-      const fractionCrates = await checkFractionCrates(fractionColumn);
-      const fractionCratesFlat = fractionCrates.flat();
-      const availableCrates = await cratesToClaim(fractionCratesFlat);
       const menu = new StringSelectMenuBuilder()
         .setCustomId(`claim`)
         .setMinValues(1)
@@ -44,14 +43,11 @@ module.exports = {
         components: [new ActionRowBuilder().addComponents(menu)],
       });
     } else {
-      const embed = new EmbedBuilder()
-        .setTitle("Nie jesteś Liderem frakcji!!!")
-        .setColor(0xcf2929);
-      const message = await interaction.channel.send({ embeds: [embed] });
-
-      setTimeout(() => {
-        message.delete().catch(console.error);
-      }, 10000);
+      await messageEmbed(
+        "Nie jesteś Liderem frakcji!!!",
+        0xcf2929,
+        interaction
+      );
     }
   },
 };

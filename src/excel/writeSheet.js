@@ -26,7 +26,7 @@ const insertCell = async (cell, values) => {
 
 const insertClaimTimeStamp = async (column) => {
   try {
-    const response = sheetInstance.spreadsheets.values.update({
+    sheetInstance.spreadsheets.values.update({
       spreadsheetId: spreadsheetId,
       range: `Frakcje!${column}5`,
       valueInputOption: "RAW",
@@ -34,15 +34,17 @@ const insertClaimTimeStamp = async (column) => {
         values: [[`${todayDate}`]],
       },
     });
+    return true;
   } catch (error) {
     console.error(error);
+    return false;
   }
 };
 
 const insertFraction = async (fractionName, fractionTag, fractionType, fractionColor, fractionCrate, column) => {
   try {
     
-    const response = sheetInstance.spreadsheets.values.update({
+    sheetInstance.spreadsheets.values.update({
       spreadsheetId: spreadsheetId,
       range: `Frakcje!${column}1:${column}6`,
       valueInputOption: "RAW",

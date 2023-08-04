@@ -4,8 +4,8 @@ const {
   ActionRowBuilder,
   TextInputBuilder,
   TextInputStyle,
-  EmbedBuilder,
 } = require("discord.js");
+const { messageEmbed } = require("../../scripts/sendEmbed.js");
 
 module.exports = {
   data: {
@@ -16,15 +16,8 @@ module.exports = {
 
     var playerFraction = await checkUserFraction(userRoles);
 
-    if (playerFraction||userRoles.has("1136436329840902165")) {
-      const embed = new EmbedBuilder()
-        .setTitle("Jesteś już we frakcji!!!")
-        .setColor(0xcf2929);
-      const message = await interaction.channel.send({ embeds: [embed] });
-
-      setTimeout(() => {
-        message.delete().catch(console.error);
-      }, 10000);
+    if (playerFraction || userRoles.has("1136436329840902165")) {
+      await messageEmbed("Jesteś już we frakcji!!!", 0xcf2929, interaction);
       return;
     }
 

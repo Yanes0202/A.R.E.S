@@ -4,7 +4,7 @@ const {
   readAllFractions,
 } = require("../../excel/readSheet.js");
 const { insertFraction } = require("../../excel/writeSheet.js");
-const { EmbedBuilder } = require("discord.js");
+const { replyEmbed } = require("../../scripts/sendEmbed.js");
 module.exports = {
   data: {
     name: "fractionCreate",
@@ -19,15 +19,11 @@ module.exports = {
     const fractionNames = await readAllFractions();
 
     if (fractionNames.flat().includes(fractionName)) {
-      const embed = new EmbedBuilder()
-        .setTitle(`Istnieje już frakcja o nazwie ${fractionName}!`)
-        .setColor(0xcf2929);
-
-      const message = await interaction.reply({ embeds: [embed] });
-
-      setTimeout(() => {
-        message.delete().catch(console.error);
-      }, 10000);
+      await replyEmbed(
+        `Istnieje już frakcja o nazwie ${fractionName}!`,
+        0xcf2929,
+        interaction
+      );
       return;
     }
     if (
@@ -35,15 +31,11 @@ module.exports = {
       fractionType.toLowerCase() !== "agresywna" &&
       fractionType.toLowerCase() !== "pokojowa"
     ) {
-      const embed = new EmbedBuilder()
-        .setTitle(`Wybierz prawidłowy typ frakcji!`)
-        .setColor(0xcf2929);
-
-      const message = await interaction.reply({ embeds: [embed] });
-
-      setTimeout(() => {
-        message.delete().catch(console.error);
-      }, 10000);
+      await replyEmbed(
+        "Wybierz prawidłowy typ frakcji!",
+        0xcf2929,
+        interaction
+      );
       return;
     }
 
@@ -72,37 +64,24 @@ module.exports = {
         } catch (error) {
           console.error("Error on role creating:", error);
         }
-
-        const embed = new EmbedBuilder()
-          .setTitle(`Udało się utworzyć frakcję ${fractionName}!`)
-          .setColor(0x00ff00);
-
-        const message = await interaction.reply({ embeds: [embed] });
-
-        setTimeout(() => {
-          message.delete().catch(console.error);
-        }, 10000);
+        await replyEmbed(
+          `Udało się utworzyć frakcję ${fractionName}!`,
+          0x00ff00,
+          interaction
+        );
       } else {
-        const embed = new EmbedBuilder()
-          .setTitle("Coś się nie udało przy tworzeniu frakcji")
-          .setColor(0xcf2929);
-
-        const message = await interaction.reply({ embeds: [embed] });
-
-        setTimeout(() => {
-          message.delete().catch(console.error);
-        }, 10000);
+        await replyEmbed(
+          "Coś się nie udało przy tworzeniu frakcji",
+          0xcf2929,
+          interaction
+        );
       }
     } else {
-      const embed = new EmbedBuilder()
-        .setTitle("Kratka jest już przez kogoś zajęta!")
-        .setColor(0xcf2929);
-
-      const message = await interaction.reply({ embeds: [embed] });
-
-      setTimeout(() => {
-        message.delete().catch(console.error);
-      }, 10000);
+      await replyEmbed(
+        "Kratka jest już przez kogoś zajęta!",
+        0xcf2929,
+        interaction
+      );
     }
   },
 };
