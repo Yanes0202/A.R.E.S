@@ -53,6 +53,20 @@ var X = [
   "AX",
   "AY",
   "AZ",
+  "BA",
+  "BB",
+  "BC",
+  "BD",
+  "BE",
+  "BF",
+  "BG",
+  "BH",
+  "BI",
+  "BJ",
+  "BK",
+  "BL",
+  "BM",
+  "BN",
 ];
 
 var Y = [
@@ -76,6 +90,21 @@ var Y = [
   "18",
   "19",
   "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31",
+  "32",
+  "33",
+  "34",
+  "35"
 ];
 
 const cratesToClaim = async (teren) => {
@@ -85,10 +114,10 @@ const cratesToClaim = async (teren) => {
   for (let i = 0; i < teren.length; i++) {
     var availableCrates = [];
 
-    var gridBazy = teren[i];
+    var baseGrid = teren[i];
 
-    const baseX = gridBazy.match(/[a-zA-Z]+/g).join("");
-    const baseY = gridBazy.match(/\d+/g).join("");
+    const baseX = baseGrid.match(/[a-zA-Z]+/g).join("");
+    const baseY = baseGrid.match(/\d+/g).join("");
 
     const indexX = X.indexOf(baseX);
     const indexY = Y.indexOf(baseY);

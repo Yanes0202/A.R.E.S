@@ -6,6 +6,7 @@ const {
   TextInputStyle,
 } = require("discord.js");
 const { messageEmbed } = require("../../scripts/sendEmbed.js");
+const { fractionLeaderRole, fractionLicenseRole } = process.env;
 
 module.exports = {
   data: {
@@ -16,8 +17,21 @@ module.exports = {
 
     var playerFraction = await checkUserFraction(userRoles);
 
-    if (playerFraction || userRoles.has("1136436329840902165")) {
-      await messageEmbed("Jesteś już we frakcji!!!", 0xcf2929, interaction);
+    if (playerFraction || userRoles.has(fractionLeaderRole)) {
+      await messageEmbed(
+        "Dwulicowa szujo! Jesteś już we frakcji!!!",
+        0xcf2929,
+        interaction
+      );
+      return;
+    }
+
+    if (!userRoles.has(fractionLicenseRole)) {
+      await messageEmbed(
+        "Jak śmiesz przychodzić tu do mnie bez uiszczenia opłaty za frakcję! Wynoś się!",
+        0xcf2929,
+        interaction
+      );
       return;
     }
 
@@ -40,7 +54,9 @@ module.exports = {
     const fractionColor = new TextInputBuilder()
       .setCustomId("fractionColor")
       .setLabel("Jaki ma być kolor frakcji?")
-      .setPlaceholder("Musi być inny niż innej frakcji")
+      .setPlaceholder(
+        "Musi być zapisany w formie red,green,blue. np. 255,0,255"
+      )
       .setRequired(true)
       .setStyle(TextInputStyle.Short);
 

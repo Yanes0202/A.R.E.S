@@ -6,7 +6,7 @@ const replyEmbed = async (text, color, interaction) => {
 
   setTimeout(() => {
     message.delete().catch(console.error);
-  }, 10000);
+  }, 5000);
 };
 
 const messageEmbed = async (text, color, interaction) => {

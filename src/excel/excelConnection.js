@@ -8,9 +8,18 @@ const googleAuth = new google.auth.JWT(
   servicePrivateKey.replace(/\\n/g, "\n"),
   "https://www.googleapis.com/auth/spreadsheets"
 );
+
 const sheetInstance = google.sheets({
   version: "v4",
   auth: googleAuth,
 });
 
-module.exports = { sheetInstance, googleAuth, spreadsheetId };
+const scriptAuth = () => {
+  try {
+    return script = google.script({ version: "v1", auth: googleAuth });
+  } catch (error) {
+    console.error("Błąd przy autoryzacji skryptu:", error);
+  }
+} 
+
+module.exports = { sheetInstance, googleAuth, spreadsheetId, scriptAuth, google };

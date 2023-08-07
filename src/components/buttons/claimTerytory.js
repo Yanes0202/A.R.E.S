@@ -5,6 +5,7 @@ const {
 const { cratesToClaim } = require("../../scripts/claimSystem.js");
 const { checkUserFraction } = require("../../scripts/checkUserFraction.js");
 const { messageEmbed } = require("../../scripts/sendEmbed.js");
+const { fractionLeaderRole } = process.env;
 const {
   StringSelectMenuBuilder,
   ActionRowBuilder,
@@ -17,13 +18,13 @@ module.exports = {
   },
   async execute(interaction, client) {
     const userRoles = interaction.member.roles.cache;
-    var playerFraction = await checkUserFraction(userRoles);
-    var fractionColumn = await checkFractionColumn(playerFraction);
-    const fractionCrates = await checkFractionCrates(fractionColumn);
-    const fractionCratesFlat = fractionCrates.flat();
-    const availableCrates = await cratesToClaim(fractionCratesFlat);
 
-    if (userRoles.has("1136436329840902165")) {
+    if (userRoles.has(fractionLeaderRole)) {
+      var playerFraction = await checkUserFraction(userRoles);
+      var fractionColumn = await checkFractionColumn(playerFraction);
+      const fractionCrates = await checkFractionCrates(fractionColumn);
+      const fractionCratesFlat = fractionCrates.flat();
+      const availableCrates = await cratesToClaim(fractionCratesFlat);
       const menu = new StringSelectMenuBuilder()
         .setCustomId(`claim`)
         .setMinValues(1)

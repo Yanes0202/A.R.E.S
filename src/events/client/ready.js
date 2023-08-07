@@ -1,3 +1,4 @@
+const { discordChannel } = process.env;
 const {
   EmbedBuilder,
   ActionRowBuilder,
@@ -9,8 +10,9 @@ module.exports = {
   name: "ready",
   once: true,
   async execute(client) {
-    const channel = client.channels.cache.get("1136653649439883294");
-
+    const channel = client.channels.cache.get(discordChannel);
+    const channel2 = client.channels.cache.get("1133603673122025542");
+   
     const reqButton = new ButtonBuilder()
     .setCustomId("fractionRegister")
     .setLabel("📝 Zarejestruj frakcję")
@@ -32,12 +34,10 @@ module.exports = {
     .setColor("#00ff00");
 
 
-    channel.messages
+    /*channel.messages
       .fetch()
       .then((messages) => {
-        // Przekształć mapę wiadomości na tablicę wiadomości.
         const messagesArray = Array.from(messages.values());
-        // Usuń wszystkie wiadomości przy użyciu pętli.
         messagesArray.forEach((message) => {
           message.delete().catch((error) => {
             console.error(
@@ -50,12 +50,19 @@ module.exports = {
       })
       .catch((error) => {
         console.error(`Nie udało się pobrać wiadomości: ${error}`);
-      }).then(channel.send({
+      }).then(
+        */
+
+
+        channel.send({
         embeds: [embed],
         components: [
           new ActionRowBuilder().addComponents(reqButton, warButton, claimButton),
         ],
-      }));
+      })
+
+
+      //);
 
     console.log(`Ready!!! ${client.user.tag} is logged in and online.`);
   },

@@ -1,5 +1,5 @@
 const { sheetInstance, spreadsheetId } = require("./excelConnection.js");
-const {  } = require("./readSheet.js")
+const {} = require("./readSheet.js");
 
 const today = new Date();
 const day = today.getDate();
@@ -41,20 +41,68 @@ const insertClaimTimeStamp = async (column) => {
   }
 };
 
-const insertFraction = async (fractionName, fractionTag, fractionType, fractionColor, fractionCrate, column) => {
+const insertFraction = async (
+  fractionName,
+  fractionTag,
+  fractionType,
+  fractionColor,
+  fractionCrate,
+  column
+) => {
   try {
-    
     sheetInstance.spreadsheets.values.update({
       spreadsheetId: spreadsheetId,
       range: `Frakcje!${column}1:${column}6`,
       valueInputOption: "RAW",
       resource: {
-        values: [[`${fractionName}`],[`${fractionTag}`],[`${fractionType}`],[`${fractionColor}`],[`${todayDate}`],[`${fractionCrate}`]],
+        values: [
+          [`${fractionName}`],
+          [`${fractionTag}`],
+          [`${fractionType}`],
+          [`${fractionColor}`],
+          [`${todayDate}`],
+          [`${fractionCrate}`],
+        ],
       },
     });
-      return true;
+    return true;
   } catch (error) {
     console.error(error);
+    return false;
+  }
+};
+
+async function insertToMap(row, column, color) {
+  const request = {
+    spreadsheetId: spreadsheetId,
+    resource: {
+      requests: [
+        {
+          repeatCell: {
+            range: {
+              sheetId: 0,
+              startRowIndex: parseInt(row) - 1,
+              endRowIndex: row,
+              startColumnIndex: column - 1,
+              endColumnIndex: column,
+            },
+            cell: {
+              userEnteredFormat: {
+                backgroundColor: color
+              },
+            },
+            fields: "userEnteredFormat(backgroundColor,textFormat)",
+          },
+        },
+      ],
+    },
+  };
+
+  try {
+    await sheetInstance.spreadsheets.batchUpdate(request);
+    return true;
+  } catch (error) {
+    console.error("Error changing background color:", error);
     return false;
   }
 }
@@ -62,5 +110,6 @@ const insertFraction = async (fractionName, fractionTag, fractionType, fractionC
 module.exports = {
   insertCell,
   insertClaimTimeStamp,
-  insertFraction
+  insertFraction,
+  insertToMap,
 };
