@@ -18,7 +18,14 @@ const messageEmbed = async (text, color, interaction) => {
   }, 10000);
 };
 
+const sendEmbedOnChannel = async (userID, embedText, color, channel) => {
+  const embed = new EmbedBuilder().setTitle(`${embedText}`).setColor(color);
+  await channel.send(`<@${userID}>`);
+  await channel.send({ embeds: [embed] });
+};
+
 module.exports = {
   replyEmbed,
   messageEmbed,
+  sendEmbedOnChannel,
 };

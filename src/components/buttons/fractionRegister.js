@@ -63,7 +63,7 @@ module.exports = {
     const fractionType = new TextInputBuilder()
       .setCustomId("fractionType")
       .setLabel("Jaki to ma być rodzaj frakcji?")
-      .setPlaceholder("Neutralna/Agresywna/Pokojowa")
+      .setPlaceholder("Neutralna/Terytorialna/Pacyfistyczna")
       .setRequired(true)
       .setStyle(TextInputStyle.Short);
 

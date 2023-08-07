@@ -3,11 +3,16 @@ const {
   checkClaimedCrates,
   readAllFractions,
 } = require("../../excel/readSheet.js");
+const {
+  replyEmbed,
+  messageEmbed,
+  sendEmbedOnChannel,
+} = require("../../scripts/sendEmbed.js");
 const { insertFraction, insertToMap } = require("../../excel/writeSheet.js");
 const { columnToNumber } = require("../../scripts/columnToNumber.js");
-const { replyEmbed, messageEmbed } = require("../../scripts/sendEmbed.js");
 const { rgbToHex, isRGBFormat } = require("../../scripts/colorScripts.js");
 const { fractionLeaderRole, fractionLicenseRole } = process.env;
+const { PermissionsBitField } = require("discord.js");
 
 module.exports = {
   data: {
@@ -33,9 +38,9 @@ module.exports = {
       return;
     }
 
-    if (!typeof fractionTag === 'string' && !fractionTag.length === 4) {
+    if (fractionTag.length > 4) {
       await messageEmbed(
-        "Tag frakcji musi zawierać litery i być mniejszy bądź równy 4",
+        "Tag frakcji musi być mniejszy bądź równy 4",
         0xcf2929,
         interaction
       );
@@ -44,11 +49,11 @@ module.exports = {
 
     if (
       fractionType.toLowerCase() !== "neutralna" &&
-      fractionType.toLowerCase() !== "agresywna" &&
-      fractionType.toLowerCase() !== "pokojowa"
+      fractionType.toLowerCase() !== "terytorialna" &&
+      fractionType.toLowerCase() !== "pacyfistyczna"
     ) {
       await messageEmbed(
-        "Ha ha! Co to za rodzaj frakcji?! Wybierz prawidłowy!",
+        "Umiesz czytać?! Co to za rodzaj frakcji?! Wybierz prawidłowy!",
         0xcf2929,
         interaction
       );
@@ -106,11 +111,43 @@ module.exports = {
             position: parseInt(leaderFractionRolePosition.position),
             reason: "CREATED BY A.R.E.S - Rejestracja Frakcji!",
           });
+
+          const channel = await interaction.guild.channels.create({
+            name: `${fractionName}`,
+            type: 0,
+            reason: "CREATED BY A.R.E.S - Rejestracja Frakcji!",
+            permissionOverwrites: [
+              {
+                id: interaction.guild.roles.everyone,
+                deny: [PermissionsBitField.Flags.ViewChannel],
+              },
+              {
+                id: fractionRole.id,
+                allow: [
+                  PermissionsBitField.Flags.ViewChannel,
+                  PermissionsBitField.Flags.SendMessages,
+                ],
+              },
+            ],
+          });
+
           await interaction.member.roles.add(fractionRole);
           await interaction.member.roles.add(fractionLeaderRole);
           await interaction.member.roles.remove(fractionLicenseRole);
+          await sendEmbedOnChannel(
+            interaction.member.id,
+            `Oto kanał tekstowy twojej frakcji. Tylko nie róbcie tu burdelu!`,
+            0x00ff00,
+            channel
+          );
         } catch (error) {
           console.error("Error on role creating:", error);
+          await messageEmbed(
+            "Nastąpił błąd przy tworzeniu ról i kanałów na discordzie",
+            0xcf2929,
+            interaction
+          );
+          return;
         }
         messageEmbed(
           `Witaj w klubie szefunciu! Frakcja ${fractionName} została założona!`,
@@ -123,6 +160,7 @@ module.exports = {
           0xcf2929,
           interaction
         );
+        return;
       }
     } else {
       await messageEmbed(
@@ -130,6 +168,7 @@ module.exports = {
         0xcf2929,
         interaction
       );
+      return;
     }
   },
 };

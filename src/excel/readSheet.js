@@ -80,7 +80,7 @@ const getColumnToInsert = async () => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 const checkClaimedCrates = async () => {
   try {
@@ -90,7 +90,11 @@ const checkClaimedCrates = async () => {
     });
 
     const sheetresult = infoObjectFromSheet.data.values;
-    return sheetresult.flat();
+    if (sheetresult) {
+      return sheetresult.flat();
+    } else {
+      return true;
+    }
   } catch (error) {
     console.error(error);
   }
@@ -131,5 +135,5 @@ module.exports = {
   checkClaimedCrates,
   getRowToInsert,
   checkFractionCrates,
-  getColumnToInsert
+  getColumnToInsert,
 };

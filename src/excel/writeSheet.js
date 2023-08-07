@@ -88,7 +88,7 @@ async function insertToMap(row, column, color) {
             },
             cell: {
               userEnteredFormat: {
-                backgroundColor: color
+                backgroundColor: color,
               },
             },
             fields: "userEnteredFormat(backgroundColor,textFormat)",
