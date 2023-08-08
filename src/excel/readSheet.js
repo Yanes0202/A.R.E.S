@@ -45,6 +45,51 @@ const checkFractionCrates = async (column) => {
   }
 };
 
+const checkFractionType = async (column) => {
+  try {
+    const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: `Frakcje!${column}3`,
+    });
+
+    const sheetresult = infoObjectFromSheet.data.values;
+    const array = sheetresult.flat();
+    return array.join("");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const checkFractionColor = async (column) => {
+  try {
+    const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: `Frakcje!${column}4`,
+    });
+
+    const sheetresult = infoObjectFromSheet.data.values;
+    const array = sheetresult.flat();
+    return array.join("");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const checkFractionTimestamp = async (column) => {
+  try {
+    const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: `Frakcje!${column}5`,
+    });
+
+    const sheetresult = infoObjectFromSheet.data.values;
+    const array = sheetresult.flat();
+    return array.join("");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const readAllFractions = async () => {
   try {
     const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
@@ -131,9 +176,12 @@ const getRowToInsert = async (column) => {
 
 module.exports = {
   checkFractionColumn,
+  checkFractionCrates,
+  checkFractionType,
+  checkFractionColor,
+  checkFractionTimestamp,
   readAllFractions,
+  getColumnToInsert,
   checkClaimedCrates,
   getRowToInsert,
-  checkFractionCrates,
-  getColumnToInsert,
 };

@@ -4,12 +4,18 @@ const {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  ActivityType,
 } = require("discord.js");
 
 module.exports = {
   name: "ready",
   once: true,
   async execute(client) {
+    client.commands.delete('ping');
+    client.commands.delete('claim');
+    client.commands.delete('button');
+    client.commands.delete('embed');
+    const activity = client.user.setActivity('twoich błagań o wybaczenie', { type: ActivityType.Listening });
     /*
     const channel = client.channels.cache.get(discordChannel);
 

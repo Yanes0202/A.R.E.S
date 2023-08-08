@@ -25,9 +25,7 @@ module.exports = (client) => {
         try {
             console.log("Started refreshing application (/) commands.");
 
-            await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
-                body: client.commandArray,
-            });
+            await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] })
 
             console.log("Successfully reload application (/) commands.");
         } catch (error) {

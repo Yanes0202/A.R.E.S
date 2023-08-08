@@ -15,6 +15,6 @@ module.exports = {
 
     setTimeout(() => {
       message.delete().catch(console.error);
-    }, 60000);
+    }, 20000);
   },
 };

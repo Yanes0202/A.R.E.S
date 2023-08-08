@@ -18,9 +18,10 @@ const insertCell = async (cell, values) => {
       },
     });
 
-    console.log(`${response.data} cell has been updated.`);
+    return true;
   } catch (error) {
     console.error(error);
+    return false;
   }
 };
 
