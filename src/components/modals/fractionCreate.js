@@ -8,10 +8,18 @@ const {
   messageEmbed,
   sendEmbedOnChannel,
 } = require("../../scripts/sendEmbed.js");
-const { insertFraction, insertToMap } = require("../../excel/writeSheet.js");
+const {
+  fractionLeaderRole,
+  fractionApplicationRole,
+  fractionLicenseRole,
+  successColor,
+  failureColor,
+  privateFractionChannels,
+} = process.env;
+const { insertFraction, insertToMap, insertTagToMap } = require("../../excel/writeSheet.js");
 const { columnToNumber } = require("../../scripts/columnToNumber.js");
 const { rgbToHex, isRGBFormat } = require("../../scripts/colorScripts.js");
-const { fractionLeaderRole, fractionLicenseRole } = process.env;
+const { addFractionTypeRole } = require("../../scripts/fractionScripts.js");
 const { PermissionsBitField } = require("discord.js");
 
 module.exports = {
@@ -27,12 +35,16 @@ module.exports = {
     const claimedCrates = await checkClaimedCrates();
     const fractionNames = await readAllFractions();
 
-    await replyEmbed(`Pozwól że na to zerknę...`, 0x00ff00, interaction);
+    await replyEmbed(
+      `Pozwól że na to zerknę...`,
+      parseInt(successColor),
+      interaction
+    );
 
     if (fractionNames.flat().includes(fractionName)) {
       await messageEmbed(
         `Ty huncwocie! Chcesz dokonać plagiatu?! Frakcja o nazwie ${fractionName} już istnieje!`,
-        0xcf2929,
+        parseInt(failureColor),
         interaction
       );
       return;
@@ -41,7 +53,7 @@ module.exports = {
     if (fractionTag.length > 4) {
       await messageEmbed(
         "Tag frakcji musi być mniejszy bądź równy 4",
-        0xcf2929,
+        parseInt(failureColor),
         interaction
       );
       return;
@@ -54,7 +66,7 @@ module.exports = {
     ) {
       await messageEmbed(
         "Umiesz czytać?! Co to za rodzaj frakcji?! Wybierz prawidłowy!",
-        0xcf2929,
+        parseInt(failureColor),
         interaction
       );
       return;
@@ -64,7 +76,7 @@ module.exports = {
     if (!isRGB) {
       await messageEmbed(
         `Ty gałganie! Kolor frakcji musi być typu RGB!!!`,
-        0xcf2929,
+        parseInt(failureColor),
         interaction
       );
       return;
@@ -96,9 +108,10 @@ module.exports = {
         column
       );
 
-      const mapInsertCompeted = await insertToMap(baseY, columnNumber, color);
+      const mapInsertCompleted = await insertToMap(baseY, columnNumber, color);
+      const mapTagInsertCompleted = await insertTagToMap(fractionCrate, fractionTag);
 
-      if (fractionInsertCompleted && mapInsertCompeted) {
+      if (fractionInsertCompleted && mapInsertCompleted && mapTagInsertCompleted) {
         try {
           const leaderFractionRolePosition =
             interaction.guild.roles.cache.get(fractionLeaderRole);
@@ -112,9 +125,11 @@ module.exports = {
             reason: "CREATED BY A.R.E.S - Rejestracja Frakcji!",
           });
 
+          const privateChannels = interaction.guild.channels.cache.get(privateFractionChannels);
           const channel = await interaction.guild.channels.create({
             name: `${fractionName}`,
             type: 0,
+            parent: privateChannels,
             reason: "CREATED BY A.R.E.S - Rejestracja Frakcji!",
             permissionOverwrites: [
               {
@@ -133,31 +148,33 @@ module.exports = {
 
           await interaction.member.roles.add(fractionRole);
           await interaction.member.roles.add(fractionLeaderRole);
-          await interaction.member.roles.remove(fractionLicenseRole);
+          await interaction.member.roles.add(fractionLicenseRole);
+          await addFractionTypeRole(fractionType.toUpperCase(), interaction);
+          await interaction.member.roles.remove(fractionApplicationRole);
           await sendEmbedOnChannel(
             interaction.member.id,
             `Oto kanał tekstowy twojej frakcji. Tylko nie róbcie tu burdelu!`,
-            0x00ff00,
+            parseInt(successColor),
             channel
           );
         } catch (error) {
           console.error("Error on role creating:", error);
           await messageEmbed(
             "Nastąpił błąd przy tworzeniu ról i kanałów na discordzie",
-            0xcf2929,
+            parseInt(failureColor),
             interaction
           );
           return;
         }
         messageEmbed(
           `Witaj w klubie szefunciu! Frakcja ${fractionName} została założona!`,
-          0x00ff00,
+          parseInt(successColor),
           interaction
         );
       } else {
         await messageEmbed(
           "Nastąpił błąd przy wpisywaniu do excela",
-          0xcf2929,
+          parseInt(failureColor),
           interaction
         );
         return;
@@ -165,7 +182,7 @@ module.exports = {
     } else {
       await messageEmbed(
         "Czyś ty oszalał?! To już jest czyjś teren!",
-        0xcf2929,
+        parseInt(failureColor),
         interaction
       );
       return;

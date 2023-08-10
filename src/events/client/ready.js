@@ -1,4 +1,4 @@
-const { discordChannel } = process.env;
+const { fractionPanelChannel, hadesLoggingChannel } = process.env;
 const {
   EmbedBuilder,
   ActionRowBuilder,
@@ -11,14 +11,13 @@ module.exports = {
   name: "ready",
   once: true,
   async execute(client) {
-    client.commands.delete('ping');
-    client.commands.delete('claim');
-    client.commands.delete('button');
-    client.commands.delete('embed');
-    const activity = client.user.setActivity('twoich błagań o wybaczenie', { type: ActivityType.Listening });
-    /*
-    const channel = client.channels.cache.get(discordChannel);
+    const activity = client.user.setActivity("twoich błagań o wybaczenie", {
+      type: ActivityType.Listening,
+    });
 
+    //const channel = client.channels.cache.get(fractionPanelChannel);
+    //const channel = client.channels.cache.get(hadesLoggingChannel);
+/*
     const reqButton = new ButtonBuilder()
       .setCustomId("fractionRegister")
       .setLabel("📝 Zarejestruj frakcję")
@@ -31,10 +30,6 @@ module.exports = {
       .setCustomId("declareWar")
       .setLabel("⚔️ Wypowiedz wojnę")
       .setStyle(ButtonStyle.Danger);
-    const mapButton = new ButtonBuilder()
-      .setCustomId("showMap")
-      .setLabel("🗺️ Pokaż mapę")
-      .setStyle(ButtonStyle.Secondary);
 
     const embed = new EmbedBuilder()
       .setTitle("PANEL ZARZĄDZANIA FRAKCJĄ")
@@ -42,6 +37,13 @@ module.exports = {
         "Specjalny panel dla liderów frakcji dzięki któremu możliwe jest wykonywanie unikalnych rodzajów aktywności."
       )
       .setColor("#00ff00");
+      /*
+    const restartButton = new ButtonBuilder()
+      .setCustomId("serverRestart")
+      .setLabel("🔄 Wykonaj Restart Serwera")
+      .setStyle(ButtonStyle.Secondary);*/
+
+
     /*
     channel.messages
       .fetch()
@@ -60,18 +62,10 @@ module.exports = {
       .catch((error) => {
         console.error(`Nie udało się pobrać wiadomości: ${error}`);
       })
-      .then(
+      .then(*//*
     channel.send({
       embeds: [embed],
-      components: [
-        new ActionRowBuilder().addComponents(
-          reqButton,
-
-          claimButton,
-          warButton,
-          mapButton
-        ),
-      ],
+      components: [new ActionRowBuilder().addComponents(reqButton,claimButton,warButton)],
     });*/
     //);
 

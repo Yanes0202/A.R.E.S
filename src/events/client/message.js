@@ -1,4 +1,4 @@
-const { discordChannel } = process.env;
+const { fractionPanelChannel } = process.env;
 
 module.exports = {
     name: "messageCreate",

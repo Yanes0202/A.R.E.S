@@ -9,13 +9,16 @@ const {
   ActionRowBuilder,
   StringSelectMenuOptionBuilder,
 } = require("discord.js");
-const { fractionLeaderRole, fractionOwnerShipRole } = process.env;
-const { cratesToClaim } = require("../../scripts/claimSystem.js");
-const { checkUserFraction } = require("../../scripts/checkUserFraction.js");
-const { messageEmbed, replyEmbed } = require("../../scripts/sendEmbed.js");
 const {
-  expansionLimitation,
-} = require("../../scripts/checkFractionTimestamp.js");
+  fractionLeaderRole,
+  fractionOwnerShipRole,
+  successColor,
+  failureColor,
+} = process.env;
+const { cratesToClaim } = require("../../scripts/claimSystem.js");
+const { checkUserFraction } = require("../../scripts/fractionScripts.js");
+const { messageEmbed, replyEmbed } = require("../../scripts/sendEmbed.js");
+const { expansionLimitation } = require("../../scripts/fractionScripts.js");
 
 module.exports = {
   data: {
@@ -24,13 +27,17 @@ module.exports = {
   async execute(interaction, client) {
     const userRoles = interaction.member.roles.cache;
 
-    await replyEmbed(`Sprawdzę czy wszystko się zgadza...`, 0x00ff00, interaction);
+    await replyEmbed(
+      `Sprawdzę czy wszystko się zgadza...`,
+      parseInt(successColor),
+      interaction
+    );
 
     if (userRoles.has(fractionLeaderRole)) {
       if (!userRoles.has(fractionOwnerShipRole)) {
         await messageEmbed(
           "Tracisz mój czas. Wynocha do sklepu i nie wracaj dopóki nie kupisz Prawa Własności!",
-          0xcf2929,
+          parseInt(failureColor),
           interaction
         );
         return;
@@ -44,7 +51,7 @@ module.exports = {
       if (!canClaim) {
         await messageEmbed(
           "Widzę że jesteś głodny ziem... Nie bądź aż taki zachłanny.. Bo się SPARZYSZ!",
-          0xcf2929,
+          parseInt(failureColor),
           interaction
         );
         return;
@@ -74,7 +81,7 @@ module.exports = {
     } else {
       await messageEmbed(
         "Nie jesteś godzien mojej uwagi... Musisz być liderem frakcji!!!",
-        0xcf2929,
+        parseInt(failureColor),
         interaction
       );
     }

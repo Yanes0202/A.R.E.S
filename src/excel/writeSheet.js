@@ -9,7 +9,7 @@ const todayDate = `${day}-${month}-${year}`;
 
 const insertCell = async (cell, values) => {
   try {
-    const response = sheetInstance.spreadsheets.values.update({
+    sheetInstance.spreadsheets.values.update({
       spreadsheetId: spreadsheetId,
       range: `Frakcje!${cell}`,
       valueInputOption: "RAW",
@@ -73,7 +73,7 @@ const insertFraction = async (
   }
 };
 
-async function insertToMap(row, column, color) {
+const insertToMap = async (row, column, color) => {
   const request = {
     spreadsheetId: spreadsheetId,
     resource: {
@@ -108,9 +108,28 @@ async function insertToMap(row, column, color) {
   }
 }
 
+const insertTagToMap = async (cell, value) => {
+  try {
+    sheetInstance.spreadsheets.values.update({
+      spreadsheetId: spreadsheetId,
+      range: `Mapa!${cell}`,
+      valueInputOption: "RAW",
+      resource: {
+        values: [[`${value}`]],
+      },
+    });
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
 module.exports = {
   insertCell,
   insertClaimTimeStamp,
   insertFraction,
   insertToMap,
+  insertTagToMap,
 };

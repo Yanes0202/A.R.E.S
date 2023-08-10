@@ -24,7 +24,7 @@ for (const folder of functionFolders) {
     require(`./functions/${folder}/${file}`)(client);
 }
 
-//client.handleCommands();
+client.handleCommands();
 client.handleEvents();
 client.handleComponents();
 client.login(token);

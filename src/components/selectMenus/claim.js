@@ -8,10 +8,10 @@ const {
   insertClaimTimeStamp,
   insertToMap,
 } = require("../../excel/writeSheet.js");
-const { checkUserFraction } = require("../../scripts/checkUserFraction.js");
+const { checkUserFraction } = require("../../scripts/fractionScripts.js");
 const { messageEmbed } = require("../../scripts/sendEmbed.js");
 const { columnToNumber } = require("../../scripts/columnToNumber.js");
-const { fractionOwnerShipRole } = process.env;
+const { fractionOwnerShipRole, successColor } = process.env;
 
 module.exports = {
   data: {
@@ -43,7 +43,7 @@ module.exports = {
     await interaction.member.roles.remove(fractionOwnerShipRole);
     await messageEmbed(
       `Wszedłeś w posiadanie kratki ${claimedCrate}. Dysponuj terenami mądrze abym nie musiał tam ingerować!`,
-      0x00ff00,
+      parseInt(successColor),
       interaction
     );
   },

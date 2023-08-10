@@ -1,4 +1,4 @@
-const { checkUserFraction } = require("../../scripts/checkUserFraction.js");
+const { checkUserFraction } = require("../../scripts/fractionScripts.js");
 const {
   ModalBuilder,
   ActionRowBuilder,
@@ -6,7 +6,8 @@ const {
   TextInputStyle,
 } = require("discord.js");
 const { messageEmbed } = require("../../scripts/sendEmbed.js");
-const { fractionLeaderRole, fractionLicenseRole } = process.env;
+const { fractionLeaderRole, fractionApplicationRole, failureColor } =
+  process.env;
 
 module.exports = {
   data: {
@@ -20,16 +21,16 @@ module.exports = {
     if (playerFraction || userRoles.has(fractionLeaderRole)) {
       await messageEmbed(
         "Dwulicowa szujo! Jesteś już we frakcji!!!",
-        0xcf2929,
+        parseInt(failureColor),
         interaction
       );
       return;
     }
 
-    if (!userRoles.has(fractionLicenseRole)) {
+    if (!userRoles.has(fractionApplicationRole)) {
       await messageEmbed(
         "Jak śmiesz przychodzić tu do mnie bez uiszczenia opłaty za frakcję! Wynoś się!",
-        0xcf2929,
+        parseInt(failureColor),
         interaction
       );
       return;

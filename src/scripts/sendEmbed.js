@@ -24,6 +24,8 @@ const sendEmbedOnChannel = async (userID, embedText, color, channel) => {
   await channel.send({ embeds: [embed] });
 };
 
+
+
 module.exports = {
   replyEmbed,
   messageEmbed,
