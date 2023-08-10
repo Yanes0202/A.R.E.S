@@ -34,9 +34,11 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setTitle("PANEL ZARZĄDZANIA FRAKCJĄ")
       .setDescription(
-        "Specjalny panel dla liderów frakcji dzięki któremu możliwe jest wykonywanie unikalnych rodzajów aktywności."
+        "Specjalny panel dla liderów frakcji dzięki któremu możliwe jest wykonywanie unikalnych rodzajów aktywności. Dodatkowo <@&1131926001501356193> mają" + 
+        " możliwość skorzystania z komendy /invite [user] oraz /remove [user] która pozwala dodawać i wyrzucać członków frakcji. UWAGA!! komendy niestety mają swoje" +
+        " ograniczenia. Jeżeli jedna komenda zostanie użyja kilka razy działać będzie tylko ta najnowsza. Pracujemy nad tym..."
       )
-      .setColor("#00ff00");
+      .setColor("#00ff00");*/
       /*
     const restartButton = new ButtonBuilder()
       .setCustomId("serverRestart")

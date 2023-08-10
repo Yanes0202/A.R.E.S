@@ -4,7 +4,7 @@ const checkFractionColumn = async (fraction) => {
   try {
     const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
       spreadsheetId: spreadsheetId,
-      range: "Frakcje!A1:R1",
+      range: "Frakcje!A1:Z1",
     });
     const sheetresult = infoObjectFromSheet.data.values;
     const values = sheetresult.flat();
@@ -44,6 +44,21 @@ const checkFractionCrates = async (column) => {
     console.error(error);
   }
 };
+
+const checkFractionTag = async (column) => {
+  try {
+    const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: `Frakcje!${column}2`,
+    });
+
+    const sheetresult = infoObjectFromSheet.data.values;
+    const array = sheetresult.flat();
+    return array.join("");
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 const checkFractionType = async (column) => {
   try {
@@ -94,7 +109,7 @@ const readAllFractions = async () => {
   try {
     const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
       spreadsheetId: spreadsheetId,
-      range: "Frakcje!B1:R1",
+      range: "Frakcje!B1:Z1",
     });
 
     const valuesFromSheet = infoObjectFromSheet.data.values;
@@ -104,11 +119,25 @@ const readAllFractions = async () => {
   }
 };
 
+const readAllFractionsTags = async () => {
+  try {
+    const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
+      spreadsheetId: spreadsheetId,
+      range: "Frakcje!B2:Z2",
+    });
+
+    const valuesFromSheet = infoObjectFromSheet.data.values;
+    return valuesFromSheet;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 const getColumnToInsert = async () => {
   try {
     const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
       spreadsheetId: spreadsheetId,
-      range: "Frakcje!A1:R1",
+      range: "Frakcje!A1:Z1",
     });
     var column;
     const valuesFromSheet = infoObjectFromSheet.data.values;
@@ -131,7 +160,7 @@ const checkClaimedCrates = async () => {
   try {
     const infoObjectFromSheet = await sheetInstance.spreadsheets.values.get({
       spreadsheetId: spreadsheetId,
-      range: "Frakcje!B6:R50",
+      range: "Frakcje!B6:Z50",
     });
 
     const sheetresult = infoObjectFromSheet.data.values;
@@ -177,10 +206,12 @@ const getRowToInsert = async (column) => {
 module.exports = {
   checkFractionColumn,
   checkFractionCrates,
+  checkFractionTag,
   checkFractionType,
   checkFractionColor,
   checkFractionTimestamp,
   readAllFractions,
+  readAllFractionsTags,
   getColumnToInsert,
   checkClaimedCrates,
   getRowToInsert,

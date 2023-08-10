@@ -1,12 +1,14 @@
 const {
   getRowToInsert,
   checkFractionColumn,
+  checkFractionTag,
   checkFractionColor,
 } = require("../../excel/readSheet.js");
 const {
   insertCell,
   insertClaimTimeStamp,
   insertToMap,
+  insertTagToMap
 } = require("../../excel/writeSheet.js");
 const { checkUserFraction } = require("../../scripts/fractionScripts.js");
 const { messageEmbed } = require("../../scripts/sendEmbed.js");
@@ -22,7 +24,8 @@ module.exports = {
     const claimedCrate = interaction.values[0];
     const roles = interaction.member.roles.cache;
     var fraction = await checkUserFraction(roles);
-    var columnPosition = await checkFractionColumn(fraction);
+    var columnPosition = await checkFractionColumn(fraction.name);
+    const fractionTag = await checkFractionTag(columnPosition);
     var rowPosition = await getRowToInsert(columnPosition);
     const baseX = claimedCrate.match(/[a-zA-Z]+/g).join("");
     const baseY = claimedCrate.match(/\d+/g).join("");
@@ -40,6 +43,7 @@ module.exports = {
     await insertCell(columnPosition + rowPosition, claimedCrate);
     await insertClaimTimeStamp(columnPosition);
     await insertToMap(baseY, columnNumber, color);
+    await insertTagToMap(claimedCrate, fractionTag);
     await interaction.member.roles.remove(fractionOwnerShipRole);
     await messageEmbed(
       `Wszedłeś w posiadanie kratki ${claimedCrate}. Dysponuj terenami mądrze abym nie musiał tam ingerować!`,

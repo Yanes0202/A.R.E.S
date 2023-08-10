@@ -42,9 +42,8 @@ module.exports = {
         );
         return;
       }
-
       var playerFraction = await checkUserFraction(userRoles);
-      var fractionColumn = await checkFractionColumn(playerFraction);
+      var fractionColumn = await checkFractionColumn(playerFraction.name);
       const fractionType = await checkFractionType(fractionColumn);
       const fractionTimestamp = await checkFractionTimestamp(fractionColumn);
       const canClaim = expansionLimitation(fractionType, fractionTimestamp);

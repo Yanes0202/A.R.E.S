@@ -2,6 +2,7 @@ const {
   getColumnToInsert,
   checkClaimedCrates,
   readAllFractions,
+  readAllFractionsTags,
 } = require("../../excel/readSheet.js");
 const {
   replyEmbed,
@@ -34,6 +35,7 @@ module.exports = {
     const fractionCrate = interaction.fields.getTextInputValue("fractionCrate");
     const claimedCrates = await checkClaimedCrates();
     const fractionNames = await readAllFractions();
+    const fractionTags = await readAllFractionsTags();
 
     await replyEmbed(
       `Pozwól że na to zerknę...`,
@@ -43,7 +45,16 @@ module.exports = {
 
     if (fractionNames.flat().includes(fractionName)) {
       await messageEmbed(
-        `Ty huncwocie! Chcesz dokonać plagiatu?! Frakcja o nazwie ${fractionName} już istnieje!`,
+        `Ty złodzieju! Frakcja o nazwie ${fractionName} już istnieje!`,
+        parseInt(failureColor),
+        interaction
+      );
+      return;
+    }
+
+    if (fractionTags.flat().includes(fractionTag)) {
+      await messageEmbed(
+        `Ty huncwocie! Chcesz dokonać plagiatu?! Tag frakcji o nazwie ${fractionTag} już istnieje!`,
         parseInt(failureColor),
         interaction
       );

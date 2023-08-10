@@ -80,7 +80,7 @@ module.exports = {
     setTimeout(async () => {
       try {
         if (message && !message.deleted) {
-          fetchedMessage.delete().catch(console.error);
+          message.delete().catch(console.error);
         }
       } catch (error) {
         console.error("Error fetching or deleting message:", error);
